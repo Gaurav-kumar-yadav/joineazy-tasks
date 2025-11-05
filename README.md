@@ -73,7 +73,9 @@ How to Run Locally:
 Clone the repository:
 
 cd joineazy-tasks
+
 git clone https://github.com/Gaurav-kumar-yadav/Joineazy-Tasks
+
 Video Link: https://www.loom.com/share/d943bb1eec40486c938d7bbc47b2267e
 
 
@@ -85,5 +87,6 @@ npm install
 Start the development server:
 
 npm start
+
 
 
