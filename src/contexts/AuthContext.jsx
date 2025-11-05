@@ -1,36 +1,46 @@
-
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { users } from '../data/mockData'; 
+import { users } from '../data/mockData'; // 
+
+console.log("mock data user:",users);
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); 
+  const [user, setUser] = useState(null);
 
+  
   useEffect(() => {
-    // Simulate checking localStorage for a logged-in user
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
   }, []);
 
-  const login = (username, password) => {
-    // Trim whitespace from username and password inputs
+  
+  const login = (username, password, role) => {
     const trimmedUsername = username.trim();
     const trimmedPassword = password.trim();
 
-    // Find user with EXACT match for both username and password
+    console.log('🟢 Attempting login with:', trimmedUsername, trimmedPassword, role);
+    console.log('🟢 Users available:', users);
+
+   
     const foundUser = users.find(
-      u => u.username === trimmedUsername && u.password === trimmedPassword
+      (u) =>
+        u.username === trimmedUsername &&
+        u.password === trimmedPassword &&
+        u.role === role
     );
 
     if (foundUser) {
+      console.log('✅ Login success:', foundUser);
       setUser(foundUser);
       localStorage.setItem('currentUser', JSON.stringify(foundUser));
-      return true; // Login successful
+      return true;
     }
-    return false; // Login failed
+
+    console.log('❌ Login failed');
+    return false;
   };
 
   const logout = () => {
@@ -39,11 +49,20 @@ export const AuthProvider = ({ children }) => {
   };
 
   const isAuthenticated = !!user;
-  const isAdmin = user && user.role === 'admin';
-  const isStudent = user && user.role === 'student';
+  const isAdmin = user?.role === 'admin';
+  const isStudent = user?.role === 'student';
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated, isAdmin, isStudent }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        logout,
+        isAuthenticated,
+        isAdmin,
+        isStudent,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
